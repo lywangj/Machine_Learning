@@ -12,8 +12,10 @@ add_library(libraries
             src/data.cpp
             src/data_handler.cpp)
 
-add_executable(main
-                src/main.cpp)
+add_subdirectory(algor_knn)
 
-target_include_directories(libraries PUBLIC include)
-target_link_libraries(main PUBLIC libraries)
+add_executable(main
+            algor_knn/src/main.cpp)
+
+target_include_directories(libraries PUBLIC include algor_knn/include)
+target_link_libraries(main PUBLIC libraries library)
