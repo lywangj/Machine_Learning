@@ -1,2 +1,0 @@
-/home/og21893/C++program/Machine_Learning/build/CMakeFiles/rebuild_cache.dir
-/home/og21893/C++program/Machine_Learning/build/CMakeFiles/edit_cache.dir
