@@ -7,7 +7,7 @@
 class data
 {
     std::vector<uint8_t> * feature_vector;
-    uint8_t label;
+    uint16_t label;
     int enum_label;
     double distance;
 
@@ -22,8 +22,9 @@ public:
     void set_distance(double val);
 
     int get_feature_vector_size();
-    uint8_t get_label();
+    uint16_t get_label();
     uint8_t get_enumerated_label();
+    double get_distance();
 
     std::vector<uint8_t> *get_feature_vector();
 

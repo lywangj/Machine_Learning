@@ -39,7 +39,7 @@ int data::get_feature_vector_size() {
     return feature_vector->size();
 }
 
-uint8_t data::get_label() {
+uint16_t data::get_label() {
 
     return label;
 }
@@ -47,6 +47,11 @@ uint8_t data::get_label() {
 uint8_t data::get_enumerated_label() {
 
     return enum_label;
+}
+
+double data::get_distance() {
+
+    return distance;
 }
 
 std::vector<uint8_t> *data::get_feature_vector() {

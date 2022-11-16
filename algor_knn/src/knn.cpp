@@ -12,7 +12,7 @@
     // std::vector<data *> validation_data;
 
 struct CompareDistance {
-    bool operator()(data const& d1, data const& d2) {
+    bool operator()(data* d1, data* d2) {
         // return "true" if "p1" is ordered
         // before "p2", for example:
         return d1->get_distance() < d2->get_distance();
@@ -33,14 +33,17 @@ knn::~knn() {
 
 void knn::find_knearest(data *query_pt) {
 
-    priority_queue<data *, vector<data *>, CompareDistance> pq;
+    std::priority_queue<data *, std::vector<data *>, CompareDistance> pq;
     
     for(int i=0; i<training_data->size(); i++) {
 
+        // std::cout << "find_knearest : " << i << std::endl;
+
         double dist = calculate_distance(query_pt, training_data->at(i));
+        // std::cout << "distance : " << dist << std::endl;
         training_data->at(i)->set_distance(dist);
 
-        std:: cout << to_string(training_data->at(i)->get_distance()) << std::endl;
+        // std::cout << "distance (retrieved) : " << training_data->at(i)->get_distance() << std::endl;
 
         pq.push(training_data->at(i));
 
@@ -49,21 +52,27 @@ void knn::find_knearest(data *query_pt) {
         }
     }
 
-    neighbors = new std::vector<data *>;
+    neighbours = new std::vector<data *>;
 
-    std::cout << "========== check : ==========" << std::endl;
+    // std::cout << "========== check : ==========" << std::endl;
 
-    for (auto d : pq) {
+    while (!pq.empty()) {
 
-        std:: cout << to_string(d->get_distance()) << std::endl;
-        neighbors.push_back(d);
+        neighbours->push_back(pq.top());
+        // std::cout << "distance : " << dist << std::endl;
+        // std:: cout << pq.top()->get_distance() << std::endl;
+
+        pq.pop();
     }
 
-    std::cout << "Successfully find " << neighbors->size() \
-            << "th nearsted training pts." << std::endl; 
+    // std::cout << "Successfully find " << neighbours->size() \
+    //         << "th nearsted training pts." << std::endl; 
 }
 
 void knn::set_training_data(std::vector<data *> *vect){
+
+    // std::cout << "aaa size " << vect->size() << std::endl;
+    // std::cout << "aaa" << vect->at(0)->get_feature_vector_size() << std::endl;
 
     training_data = vect;
 }
@@ -88,10 +97,13 @@ int knn::predict() {
     std::map<uint8_t, int> class_freq;
     for (int i=0; i<neighbours->size(); ++i) {
 
-        if(class_freq[neighbours->at(i)->get_label()]) = 1;
-    }else {
+        if(class_freq.find(neighbours->at(i)->get_label()) == class_freq.end()) {
 
-        class_freq[neighbours->at(i)->get_label()]++;
+            class_freq[neighbours->at(i)->get_label()] = 1;
+        } else {
+
+            class_freq[neighbours->at(i)->get_label()]++;
+        }
     }
 
     int best{0};
@@ -114,6 +126,9 @@ double knn::calculate_distance(data* query_pt, data* input) {
 
     double distance{0.0};
 
+    // std::cout << query_pt->get_feature_vector_size() << std::endl;
+    // std::cout << input->get_feature_vector_size() << std::endl;
+
     if (query_pt->get_feature_vector_size() \
                 != input->get_feature_vector_size()) {
 
@@ -121,16 +136,21 @@ double knn::calculate_distance(data* query_pt, data* input) {
         exit(1);
     }
 
-    #ifdef EUCLID
+    // #ifdef EUCLID
     for (unsigned i=0; i<query_pt->get_feature_vector_size(); i++) {
 
-        distance += pow(query_pt->get_feature_vector->at(i) \
-                        input->get_feature_vector->at(i), 2);
+        // std::cout << (int)query_pt->get_feature_vector()->at(i) << std::endl;
+        // std::cout << (int)input->get_feature_vector()->at(i) << std::endl;
+
+        distance += pow(query_pt->get_feature_vector()->at(i) - input->get_feature_vector()->at(i), 2);
+        // std::cout << distance << std::endl;
     }
-    return sqrt(distance);
-    #elif defined MANHATTAN
+    distance = sqrt(distance);
+
+    return distance;
+    // #elif defined MANHATTAN
     // could be implemented later
-    #endif
+    // #endif
 }
 
 double knn::validate_performance() {
@@ -139,7 +159,10 @@ double knn::validate_performance() {
     int count{0};
     int data_index{0};
 
-    for (data * query_pt : * validatioin_data) {
+    for (data * query_pt : * validation_data) {
+
+        // std::cout << "data * query_pt : * validation_data" << std::endl;
+        // std::cout << query_pt->get_feature_vector_size() << std::endl;
 
         find_knearest(query_pt);
         int prediction = predict();
@@ -148,8 +171,8 @@ double knn::validate_performance() {
             count++;
         }
         data_index++;
-        std::cout << "Current performance = " << \
-                ((double)count*100.0)/((double)data_index) << "%" << std::endl;
+        // std::cout << "Current performance = " << \
+        //         ((double)count*100.0)/((double)data_index) << "%" << std::endl;
     }
     curr_perf = ((double)count*100.0)/((double)validation_data->size());
     std::cout << "Validation performance for K = " << k << ":" << curr_perf << "%" << std::endl;
@@ -164,7 +187,7 @@ double knn::test_performance()  {
     int count{0};
     int data_index{0};
 
-    for (data * query_pt : * testing_data) {
+    for (data * query_pt : * test_data) {
 
         find_knearest(query_pt);
         int prediction = predict();
@@ -173,10 +196,10 @@ double knn::test_performance()  {
             count++;
         }
         data_index++;
-        std::cout << "Current performance = " << \
-                ((double)count*100.0)/((double)data_index) << "%" << std::endl;
+        // std::cout << "Current performance = " << \
+        //         ((double)count*100.0)/((double)data_index) << "%" << std::endl;
     }
-    curr_perf = ((double)count*100.0)/((double)validation_data->size());
+    curr_perf = ((double)count*100.0)/((double)test_data->size());
     std::cout << "Testing performance = " << curr_perf << "%" << std::endl;
 
     return curr_perf;

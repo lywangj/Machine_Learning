@@ -8,10 +8,10 @@ class knn {
 
     int k;
 
-    std::vector<data *> *neighbours;
-    std::vector<data *> *training_data;
-    std::vector<data *> *test_data;
-    std::vector<data *> *validation_data;
+    std::vector<data *> * neighbours;
+    std::vector<data *> * training_data;
+    std::vector<data *> * test_data;
+    std::vector<data *> * validation_data;
 
 public:
     knn(int);

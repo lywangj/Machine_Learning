@@ -20,9 +20,9 @@ class data_handler
     int feature_vector_size;
     std::map<uint8_t, int> class_map;
 
-    const double TRAIN_SET_PERCENT = 0.75;
-    const double TEST_SET_PERCENT = 0.20;
-    const double VALIDATION_SET_PERCENT = 0.05;
+    const double TRAIN_SET_PERCENT = 0.075;
+    const double TEST_SET_PERCENT = 0.020;
+    const double VALIDATION_SET_PERCENT = 0.005;
 
 public:
 

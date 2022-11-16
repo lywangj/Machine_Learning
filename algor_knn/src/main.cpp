@@ -19,12 +19,15 @@ int main() {
     knearest->set_test_data(dh->get_test_data());
     knearest->set_validation_data(dh->get_validation_data());
 
+    std::cout << "Starting with Kth-nearest algorithms" << std::endl;
+
     double performance{0.0};
     double best_performance{0.0};
     int best_k{1};
 
     for(int i = 1; i <= 4; i++)
     {
+        std::cout << "check kth-nearest, k = " << i << std::endl;
         if(i == 1)
         {
             knearest->set_k(i);

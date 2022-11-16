@@ -49,11 +49,12 @@ void data_handler::read_feature_vector(std::string path) {
 
                 if(fread(element, sizeof(element), 1, f)) {
 
-                    d->append_to_feature_vector(element[PIXEL_IDX]);
+                    d->append_to_feature_vector(element[PIXEL_IDX]);   // 0
                 }else {
                     std::cout << "ERROR: Incorrect file content." << std::endl;
                     exit(1);
                 }
+                // std::cout << k << " data with " << d->get_feature_vector_size() << std::endl;
             }
             data_array->push_back(d);
         }
@@ -183,6 +184,16 @@ uint32_t data_handler::convert_to_little_endian(const unsigned char *bytes) {
                         (bytes[3])); 
 }
 
-std::vector<data *> *data_handler::get_training_data() {}
-std::vector<data *> *data_handler::get_test_data() {}
-std::vector<data *> *data_handler::get_validation_data() {}
+std::vector<data *> *data_handler::get_training_data() {
+
+    return training_data;
+}
+std::vector<data *> *data_handler::get_test_data() {
+
+    return test_data;
+}
+
+std::vector<data *> *data_handler::get_validation_data() {
+
+    return validation_data;
+}
