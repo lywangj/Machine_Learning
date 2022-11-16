@@ -1,5 +1,13 @@
 # Machine Learning
 
+### 
+
+MNIST database : http://yann.lecun.com/exdb/mnist/
+
+### Three-stage of learning
+- training stage
+- validation stage
+- test stage
 
 
 ```
